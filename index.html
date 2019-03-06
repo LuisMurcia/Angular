@@ -1,5 +1,4 @@
 ﻿<html lang="en">
-
 <head>
     <title>MusicYourLife</title>
     <meta charset="utf-8">
@@ -15,7 +14,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style2.css">
 </head>
 <body class="bg-dark">
     <div class="container-fluid" ng-app="myapp" ng-controller="mycontroller">
@@ -25,8 +24,8 @@
                     <a class="navbar-brand text-white pt-3" href="#"><h4>MusicYourLife</h4></a>
                 </nav>
                 <div class="bg-dark text-white pt-3 line">
-                    Search: <input type="text" ng-model="filt"><br><br>
-                    Name: <input type="text" ng-model="listname"><button class="ml-2 btn btn-success"
+                    Search list: &nbsp&nbsp<input type="text" ng-model="filt"><br><br>
+                    New list name: &nbsp&nbsp<input type="text" ng-model="listname"><button class="ml-3 btn btn-primary"
                         ng-click="newList()">Create
                         list</button><br><br>
                     <p class="text-white font-weight-bold">{{errorText}}</p>
@@ -46,8 +45,8 @@
                                     <td>{{x.nombre}}</td>
                                     <td>{{calc(x.canciones)}}</td>
                                     <td>{{calcDuration(x.canciones)}}</td>
-                                    <td><button class="btn btn-success" ng-click="showSongs(x.canciones,x)">Show Songs</button></td>
-                                    <td><button class="btn btn-primary" ng-click="searchSongs(x)">More Songs to Add</button>
+                                    <td><button class="btn btn-primary" ng-click="showSongs(x.canciones,x)">Show Songs</button></td>
+                                    <td><button class="btn btn-success" ng-click="searchSongs(x)">More Songs to Add</button>
                                     </td>
                                     <td> <button class="btn btn-danger" ng-click="removeList($index)">x</button></td>
                                 </tr>
@@ -56,7 +55,8 @@
                     </div>
                 </div>
                 <div class="bg-dark text-white pt-3 line" id="showSongs" ng-show="show">
-                    Search: <input type="text" ng-model="filtrar"><br><br>
+                    Search song: &nbsp&nbsp<input type="text" ng-model="filtrar"><br><br>
+                    Order by: &nbsp&nbsp
                     <select ng-model="order">
                         <option value="id">ID</option>
                         <option value="nombre">Name</option>
@@ -90,7 +90,8 @@
                     </div>
                 </div>
                 <div class="bg-dark text-white pt-3 line" id="searchSongs" ng-show="showsearch">
-                    Search: <input type="text" ng-model="search"><br><br>
+                    Search song: &nbsp&nbsp<input type="text" ng-model="search"><br><br>
+                    Order by: &nbsp&nbsp
                     <select ng-model="order">
                         <option value=""></option>
                         <option value="id">ID</option>
@@ -119,12 +120,15 @@
                                     <td>{{x.autor}}</td>
                                     <td>{{x.genero}}</td>
                                     <td>{{x.duracion}}</td>
-                                    <td><button class="btn btn-primary" ng-click="addSong($index)">Add </button></td>
+                                    <td><button class="btn btn-success" ng-click="addSong($index)">Add </button></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <button class="btn btn-primary" ng-click="limitplus()">More Songs</button><button class="btn btn-danger ml-3" ng-click="limitless()">Less Songs</button>
-                        <p class="text-white font-weight-bold">{{mensaje}}</p>
+                        <div class="text-center">
+                            <button class="btn btn-success" ng-click="limitplus()">More Songs</button>
+                            <button class="btn btn-danger ml-3" ng-click="limitless()">Less Songs</button>
+                            <p class="text-white font-weight-bold p-3">{{mensaje}}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -140,48 +144,6 @@
             $http.get("json/lists.json").then(function (json) {
                 $scope.listas = json.data.listas;
             });
-            $scope.removeList = function (x) {
-                $scope.errorText = "";
-                $scope.listas.splice(x, 1);
-            }
-            $scope.removeSong = function (x, y) {
-                $scope.errorText = "";
-                $scope.listas[y].canciones.splice(x, 1);
-                $scope.listsong.splice(x, 1);
-            }
-            $scope.addSong = function (x) {
-                $scope.mensaje = "";
-                var cont = 0;
-                for (var i = 0; i < $scope.listas[$scope.addList].canciones.length; i++) {
-                    if ($scope.listas[$scope.addList].canciones[i] == $scope.canciones[x].nombre) {
-                        cont++;
-                    }
-                }
-                if (cont == 0) {
-                    $scope.listas[$scope.addList].canciones.push($scope.canciones[x].nombre);
-                } else {
-                    $scope.mensaje = "Cancion repetida";
-                }
-            }
-            $scope.showsearch = false;
-            $scope.searchSongs = function (x) {
-                $scope.showsearch = !$scope.showsearch;
-                for (var i = 0; i < $scope.listas.length; i++) {
-                    if ($scope.listas[i].nombre == x.nombre) {
-                        $scope.addList = i;
-                    }
-                }
-            }
-            $scope.show = false;
-            $scope.showSongs = function (x, y) {
-                $scope.show = !$scope.show;
-                $scope.listsong = $scope.echoSongs(x);
-                for (var i = 0; i < $scope.listas.length; i++) {
-                    if ($scope.listas[i].nombre == y.nombre) {
-                        $scope.usedlist = i;
-                    }
-                }
-            }
             $scope.newList = function () {
                 $scope.errorText = "";
                 var cont = 0;
@@ -197,6 +159,66 @@
                     $scope.errorText = "Ya existe esta lista.";
                 }
             }
+            $scope.removeList = function (x) {
+                $scope.errorText = "";
+                $scope.listas.splice(x, 1);
+            }
+            $scope.addSong = function (x) {
+                $scope.mensaje = "";
+                var cont = 0;
+                for (var i = 0; i < $scope.listas[$scope.addList].canciones.length; i++) {
+                    if ($scope.listas[$scope.addList].canciones[i] == $scope.canciones[x].nombre) {
+                        cont++;
+                    }
+                }
+                if (cont == 0) {
+                    $scope.listas[$scope.addList].canciones.push($scope.canciones[x].nombre);
+                } else {
+                    $scope.mensaje = "Esta canción ya se encuentra en la lista.";
+                }
+            }
+            $scope.show = false;
+            $scope.showSongs = function (x, y) {
+                $scope.show = !$scope.show;
+                $scope.listsong = $scope.echoSongs(x);
+                for (var i = 0; i < $scope.listas.length; i++) {
+                    if ($scope.listas[i].nombre == y.nombre) {
+                        $scope.usedlist = i;
+                    }
+                }
+            }
+            $scope.echoSongs = function (x) {
+                var nameS = [];
+                for (var i = 0; i < x.length; i++) {
+                    for (var z = 0; z < $scope.canciones.length; z++) {
+                        if ($scope.canciones[z].nombre == x[i]) {
+                            nameS[i] = $scope.canciones[z];
+                        }
+                    }
+                }
+                return nameS;
+            }
+            $scope.showsearch = false;
+            $scope.searchSongs = function (x) {
+                $scope.showsearch = !$scope.showsearch;
+                for (var i = 0; i < $scope.listas.length; i++) {
+                    if ($scope.listas[i].nombre == x.nombre) {
+                        $scope.addList = i;
+                    }
+                }
+            }
+            $scope.removeSong = function (x, y) {
+                $scope.errorText = "";
+                $scope.listas[y].canciones.splice(x, 1);
+                $scope.listsong.splice(x, 1);
+            }
+            $scope.basiclimit = 4;
+            $scope.limitplus = function () {
+                $scope.basiclimit++;
+            }
+            $scope.limitless = function () {
+                $scope.basiclimit--;
+            }
             $scope.calc = function (x) {
                 var numSong = x.length;
                 return numSong;
@@ -211,24 +233,6 @@
                     }
                 }
                 return dur;
-            }
-            $scope.echoSongs = function (x) {
-                var nameS = [];
-                for (var i = 0; i < x.length; i++) {
-                    for (var z = 0; z < $scope.canciones.length; z++) {
-                        if ($scope.canciones[z].nombre == x[i]) {
-                            nameS[i] = $scope.canciones[z];
-                        }
-                    }
-                }
-                return nameS;
-            }
-            $scope.basiclimit = 4;
-            $scope.limitplus = function () {
-                $scope.basiclimit++;
-            }
-            $scope.limitless = function () {
-                $scope.basiclimit--;
             }
         });
     </script>

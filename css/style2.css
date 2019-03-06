@@ -12,6 +12,14 @@ h1, h2, h3, h4, h5, h6 {
 .btn-danger:hover, .btn-danger:focus {
 	background-color: #990000 !important;
 }
+.btn-success {
+	background-color: #18BC9C !important;
+	border-color: #18BC9C !important;
+}
+.btn-success:hover, .btn-success:focus, .btn-success:active {
+	background-color: #128f76 !important;
+	border-color: #128f76 !important;
+}
 .bg-dark {
 	background-color: #000d1a !important;
 }
